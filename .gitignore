@@ -12,3 +12,6 @@ jspm_packages
 .env.development
 .env.production
 
+# Compiled code
+dist
+

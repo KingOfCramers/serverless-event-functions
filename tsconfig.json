@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017", "dom", "ESNext"],
     "removeComments": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -9,7 +9,11 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
-    "outDir": "lib"
+    "outDir": "dist",
+    "baseUrl": "src",
+    "paths": {
+      "@common/*": ["./common/*"]
+    }
   },
   "include": ["./**/*.ts"],
   "exclude": [

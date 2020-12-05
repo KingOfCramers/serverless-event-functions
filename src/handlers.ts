@@ -1,8 +1,8 @@
 import { Handler } from "./Types";
 import axios from "axios";
-import { createError, createSuccess, createApolloClient } from "./common";
+import { createError, createSuccess, createApolloClient } from "@common/index";
 
-import { gql, ApolloError } from "@apollo/client";
+import { gql, ApolloError } from "@apollo/client/core";
 
 class Disclosure {
   id: string;

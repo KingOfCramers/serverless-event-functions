@@ -5,7 +5,7 @@ import {
   createHttpLink,
   ApolloClient,
   NormalizedCacheObject,
-} from "@apollo/client";
+} from "@apollo/client/core";
 
 export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   const cache = new InMemoryCache();
