@@ -10,6 +10,11 @@ export interface InputType {
   puppeteer: boolean;
 }
 
+export interface HouseDisclosureInput extends InputType {
+  year: number;
+  state: string;
+}
+
 export interface InputWithSelector extends InputType {
   selector?: string;
   unique?: boolean;

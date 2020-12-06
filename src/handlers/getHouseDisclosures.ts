@@ -6,8 +6,11 @@ import {
   createApolloClient,
 } from "../common/index";
 
+import { HouseDisclosureInput } from "../Types";
+
 import { ApolloError } from "@apollo/client/core";
 import { ADD_HOUSE_DISCLOSURE } from "../gql";
+import { parseInput } from "../common";
 
 type HouseDisclosure = {
   office: string;
@@ -19,13 +22,14 @@ type HouseDisclosure = {
 };
 
 export const getHouseDisclosures: Handler = async (
-  _event,
+  event,
   _context,
   _callback
 ) => {
+  const input: HouseDisclosureInput = parseInput(event);
   const res = await axios.post(
     process.env.SCRAPER_BASE_URL + "getHouseDisclosures",
-    {}
+    { state: input.state, year: input.year }
   );
 
   if (res.status !== 200) {
@@ -57,6 +61,7 @@ export const getHouseDisclosures: Handler = async (
       }
     }
   }
+
   // Send a success message upon completion
   return createSuccess("Completed function.");
 };

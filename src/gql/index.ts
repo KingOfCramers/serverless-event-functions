@@ -9,7 +9,7 @@ export const ADD_SENATE_DISCLOSURE = gql`
     $title: String!
     $date: DateTime!
   ) {
-    addDisclosure(
+    addSenateDisclosure(
       input: {
         first: $first
         last: $last
@@ -30,10 +30,10 @@ export const ADD_HOUSE_DISCLOSURE = gql`
     $first: String!
     $last: String!
     $title: String!
-    $year: Int!
+    $year: Float!
     $link: String!
   ) {
-    addDisclosure(
+    addHouseDisclosure(
       input: {
         office: $office
         first: $first

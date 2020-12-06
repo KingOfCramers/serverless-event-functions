@@ -56,9 +56,7 @@ export const getSenateDisclosures: Handler = async (
     } catch (err) {
       if (err instanceof ApolloError) {
         console.error("❌", `Could not save data due to GraphQLError(s)`);
-        err.graphQLErrors.forEach((error) =>
-          console.error("  ", error.message)
-        );
+        err.graphQLErrors.forEach((error) => console.error(" ", error.message));
       } else if (err instanceof Error) {
         console.error("❌", `Could not save: ${err.message}`);
       }
