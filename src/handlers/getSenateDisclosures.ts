@@ -6,7 +6,8 @@ import {
   createApolloClient,
 } from "../common/index";
 
-import { gql, ApolloError } from "@apollo/client/core";
+import { ApolloError } from "@apollo/client/core";
+import { ADD_SENATE_DISCLOSURE } from "../gql";
 
 type SenateDisclosure = {
   id: string;
@@ -44,36 +45,12 @@ export const getSenateDisclosures: Handler = async (
   // Create an ApolloClient for interacting with the API
   const client = createApolloClient();
 
-  // Create the scaffolding for each GQL POST request
-  const ADD_DISCLOSURE = gql`
-    mutation(
-      $first: String!
-      $last: String!
-      $link: String!
-      $title: String!
-      $date: DateTime!
-    ) {
-      addDisclosure(
-        input: {
-          first: $first
-          last: $last
-          link: $link
-          title: $title
-          date: $date
-        }
-      ) {
-        id
-        first
-      }
-    }
-  `;
-
   // For each datapoint scraped, send the GQL POST to the API
   for (const disclosure of data) {
     const { first, last, link, title, date } = disclosure;
     try {
       await client.mutate({
-        mutation: ADD_DISCLOSURE,
+        mutation: ADD_SENATE_DISCLOSURE,
         variables: { first, last, link, title, date },
       });
     } catch (err) {

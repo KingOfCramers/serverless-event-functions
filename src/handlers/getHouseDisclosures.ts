@@ -6,7 +6,8 @@ import {
   createApolloClient,
 } from "../common/index";
 
-import { gql, ApolloError } from "@apollo/client/core";
+import { ApolloError } from "@apollo/client/core";
+import { ADD_HOUSE_DISCLOSURE } from "../gql";
 
 type HouseDisclosure = {
   office: string;
@@ -37,36 +38,12 @@ export const getHouseDisclosures: Handler = async (
 
   const client = createApolloClient();
 
-  const ADD_DISCLOSURE = gql`
-    mutation(
-      $office: String!
-      $first: String!
-      $last: String!
-      $title: String!
-      $year: Int!
-      $link: String!
-    ) {
-      addDisclosure(
-        input: {
-          office: $office
-          first: $first
-          last: $last
-          title: $title
-          year: $year
-          link: $link
-        }
-      ) {
-        id
-      }
-    }
-  `;
-
   // For each datapoint scraped, send the GQL POST to the API
   for (const disclosure of data) {
     const { office, first, last, title, year, link } = disclosure;
     try {
       await client.mutate({
-        mutation: ADD_DISCLOSURE,
+        mutation: ADD_HOUSE_DISCLOSURE,
         variables: { office, first, last, title, year, link },
       });
     } catch (err) {
