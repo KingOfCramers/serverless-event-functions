@@ -1,31 +1,29 @@
-import { Handler } from "./Types";
+import { Handler } from "../Types";
 import axios from "axios";
-import { createError, createSuccess, createApolloClient } from "@common/index";
+import {
+  createError,
+  createSuccess,
+  createApolloClient,
+} from "../common/index";
 
 import { gql, ApolloError } from "@apollo/client/core";
 
-class Disclosure {
-  id: string;
+type HouseDisclosure = {
+  office: string;
   first: string;
   last: string;
-  link: string;
   title: string;
-  date: Date;
-}
+  year: number;
+  link: string;
+};
 
-export const getSenateDisclosures: Handler = async (
+export const getHouseDisclosures: Handler = async (
   _event,
   _context,
   _callback
 ) => {
-  // Activate our scraper with the correct POST
-  // request and pull off the relevant data from
-  // the Axios response. The SCRAPER_BASE_URL is our
-  // Lambda function production API, with the getSenateDisclosures
-  // pointing to the specific Lambda for Senate disclosures
-
   const res = await axios.post(
-    process.env.SCRAPER_BASE_URL + "getSenateDisclosures",
+    process.env.SCRAPER_BASE_URL + "getHouseDisclosures",
     {}
   );
 
@@ -35,42 +33,41 @@ export const getSenateDisclosures: Handler = async (
     );
   }
 
-  const data: Disclosure[] = res.data;
+  const data: HouseDisclosure[] = res.data;
 
-  // Create an ApolloClient for interacting with the API
   const client = createApolloClient();
 
-  // Create the scaffolding for each GQL POST request
   const ADD_DISCLOSURE = gql`
     mutation(
+      $office: String!
       $first: String!
       $last: String!
-      $link: String!
       $title: String!
-      $date: DateTime!
+      $year: Int!
+      $link: String!
     ) {
       addDisclosure(
         input: {
+          office: $office
           first: $first
           last: $last
-          link: $link
           title: $title
-          date: $date
+          year: $year
+          link: $link
         }
       ) {
         id
-        first
       }
     }
   `;
 
   // For each datapoint scraped, send the GQL POST to the API
   for (const disclosure of data) {
-    const { first, last, link, title, date } = disclosure;
+    const { office, first, last, title, year, link } = disclosure;
     try {
       await client.mutate({
         mutation: ADD_DISCLOSURE,
-        variables: { first, last, link, title, date },
+        variables: { office, first, last, title, year, link },
       });
     } catch (err) {
       if (err instanceof ApolloError) {
